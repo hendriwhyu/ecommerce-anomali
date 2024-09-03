@@ -50,6 +50,11 @@ class User extends Authenticatable implements FilamentUser
         ];
     }
 
+    public function setPassword(string $password): static{
+        $this->password = bcrypt($password, env('BCRYPT_ROUNDS'));
+        return $this;
+    }
+
     public function canAccessPanel(Panel $panel): bool
     {
         return str_ends_with($this->email, '@anomali.com');
