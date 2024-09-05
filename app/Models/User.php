@@ -11,10 +11,12 @@ use Filament\Models\Contracts\FilamentUser;
 use Spatie\Permission\Traits\HasRoles;
 use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
 use Filament\Panel;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements FilamentUser
 {
-    use HasFactory, Notifiable, HasRoles;
+    use HasFactory, Notifiable, HasRoles, HasPanelShield, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -58,5 +60,13 @@ class User extends Authenticatable implements FilamentUser
     public function canAccessPanel(Panel $panel): bool
     {
         return str_ends_with($this->email, '@anomali.com');
+    }
+
+    public function posts(): HasMany{
+        return $this->hasMany(Post::class);
+    }
+
+    public function orders(): HasMany{
+        return $this->hasMany(Order::class);
     }
 }
