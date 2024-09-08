@@ -11,13 +11,16 @@ use Filament\Models\Contracts\FilamentUser;
 use Spatie\Permission\Traits\HasRoles;
 use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
 use Filament\Panel;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements FilamentUser
 {
-    use HasFactory, Notifiable, HasRoles, HasPanelShield, HasApiTokens;
+    use HasFactory, Notifiable, HasRoles, HasApiTokens, HasUuids;
 
+    protected $keyType = 'string';
+    public $incrementing = false;
     /**
      * The attributes that are mass assignable.
      *
@@ -47,15 +50,16 @@ class User extends Authenticatable implements FilamentUser
     protected function casts(): array
     {
         return [
+            'id' => 'string',
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
     }
 
-    public function setPassword(string $password): static{
-        $this->password = bcrypt($password, env('BCRYPT_ROUNDS'));
-        return $this;
-    }
+    // public function setPassword(string $password): static{
+    //     $this->password = bcrypt($password, env('BCRYPT_ROUNDS'));
+    //     return $this;
+    // }
 
     public function canAccessPanel(Panel $panel): bool
     {

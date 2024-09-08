@@ -22,8 +22,8 @@ return [
          * The model you want to use as a Role model needs to implement the
          * `Spatie\Permission\Contracts\Role` contract.
          */
-        'permission' => Spatie\Permission\Models\Permission::class,
-        'role' => Spatie\Permission\Models\Role::class,
+        'permission' => App\Models\Permission::class,
+        'role' => App\Models\Role::class,
 
     ],
 
@@ -85,7 +85,7 @@ return [
          * that case, name this `model_uuid`.
          */
 
-        'model_morph_key' => 'model_id',
+        'model_morph_key' => 'model_uuid',
 
         /*
          * Change this if you want to use the teams feature and your related model's
