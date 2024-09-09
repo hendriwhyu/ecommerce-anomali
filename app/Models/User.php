@@ -17,7 +17,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements FilamentUser
 {
-    use HasFactory, Notifiable, HasRoles, HasApiTokens, HasUuids;
+    use HasFactory, Notifiable, HasRoles, HasPanelShield, HasApiTokens, HasUuids;
 
     protected $keyType = 'string';
     public $incrementing = false;

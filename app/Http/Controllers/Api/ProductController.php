@@ -36,14 +36,14 @@ class ProductController extends BaseController
         return $this->sendResponse($data, 'Products retrieved successfully');
     }
 
-    public function showProductById($id){
-        $dataProduct = Product::with(['categories'])->findOrFail($id);
+    public function showProductById(Product $product){
+        $productById = $product->with(['categories'])->first();
 
-        if(!$dataProduct){
+        if(!$productById){
             return $this->sendError('Product not found.');
         }
 
-        $data = new ProductCollection($dataProduct);
+        $data = new ProductCollection($productById);
 
         return $this->sendResponse($data, 'Product retrieved successfully');
     }

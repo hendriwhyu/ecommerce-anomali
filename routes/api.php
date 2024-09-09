@@ -23,6 +23,7 @@ Route::get('/user', function (Request $request) {
 
 // Products
 Route::get('/products', [ProductController::class, 'showProducts']);
-Route::get('/products/{id}', [ProductController::class, 'showProductById']);
+Route::get('/products/{product:slug}', [ProductController::class, 'showProductById']);
 
+// Posts
 Route::get('/posts', [PostController::class, 'showPosts']);

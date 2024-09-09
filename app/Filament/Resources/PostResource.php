@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\ProductResource\Pages;
-use App\Filament\Resources\ProductResource\RelationManagers;
-use App\Models\Product;
+use App\Filament\Resources\PostResource\Pages;
+use App\Filament\Resources\PostResource\RelationManagers;
+use App\Models\Post;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,23 +13,22 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class ProductResource extends Resource
+class PostResource extends Resource
 {
-    protected static ?string $model = Product::class;
+    protected static ?string $model = Post::class;
 
     protected static ?string $navigationGroup = 'Resource';
 
-    protected static ?string $navigationIcon = 'heroicon-o-square-3-stack-3d';
+    protected static ?string $navigationIcon = 'heroicon-o-newspaper';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
+                Forms\Components\TextInput::make('title')
                     ->required()
                     ->maxLength(255)
                     ->columnSpanFull(),
-
                 Forms\Components\Select::make('category_id')
                     ->label('Category')
                     ->searchable()
@@ -38,25 +37,17 @@ class ProductResource extends Resource
                     ->required()
                     ->preload()
                     ->relationship('categories', 'name'),
-
-                Forms\Components\TextInput::make('price')
-                    ->prefix('Rp. ')
-                    ->numeric()
+                Forms\Components\RichEditor::make('content')
                     ->required()
-                    ->minValue(0),
-
-                Forms\Components\TextInput::make('stock')
-                    ->numeric()
-                    ->required()
-                    ->minValue(0),
-
-                Forms\Components\RichEditor::make('description')
                     ->fileAttachmentsDisk('s3')
                     ->fileAttachmentsDirectory('attachments')
                     ->columnSpanFull(),
-
-                Forms\Components\FileUpload::make('image')
+                Forms\Components\FileUpload::make('thumbnail')
+                    ->required()
                     ->image()
+                    ->columnSpanFull(),
+                Forms\Components\Select::make('author_id')
+                    ->relationship('author', 'name')
                     ->required()
                     ->columnSpanFull(),
             ]);
@@ -66,17 +57,20 @@ class ProductResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                Tables\Columns\TextColumn::make('title')
                     ->searchable()
                     ->sortable(),
-
                 Tables\Columns\TextColumn::make('categories.name')
+                    ->label('Category')
                     ->badge()
                     ->searchable()
                     ->sortable(),
-
-                Tables\Columns\TextColumn::make('stock')
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
             ])
             ->filters([
 
@@ -109,9 +103,9 @@ class ProductResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListProducts::route('/'),
-            'create' => Pages\CreateProduct::route('/create'),
-            'edit' => Pages\EditProduct::route('/{record}/edit'),
+            'index' => Pages\ListPosts::route('/'),
+            'create' => Pages\CreatePost::route('/create'),
+            'edit' => Pages\EditPost::route('/{record}/edit'),
         ];
     }
 

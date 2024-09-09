@@ -51,29 +51,40 @@ class UserResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                ->searchable(),
+                ->searchable()
+                ->sortable(),
                 Tables\Columns\TextColumn::make('email')
-                ->searchable(),
+                ->searchable()
+                ->sortable(),
                 Tables\Columns\TextColumn::make('roles.name')
                 ->badge()
-                ->searchable(),
+                ->searchable()
+                ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
-                ->dateTime(),
+                ->dateTime()
+                ->label('Created')
+                ->sortable(),
                 Tables\Columns\TextColumn::make('updated_at')
                 ->dateTime()
                 ->label('Last Modified')
+                ->sortable(),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('roles')
                     ->relationship('roles', 'name'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make(),
+                ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ]);
     }

@@ -34,9 +34,14 @@ class OrderResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id'),
-                Tables\Columns\TextColumn::make('users.name'),
-                Tables\Columns\TextColumn::make('total_price'),
-                Tables\Columns\TextColumn::make('status'),
+                Tables\Columns\TextColumn::make('users.name')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('total_price')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('status')
+                    ->searchable()
+                    ->sortable(),
             ])
             ->filters([
                 //
@@ -49,6 +54,8 @@ class OrderResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ]);
     }

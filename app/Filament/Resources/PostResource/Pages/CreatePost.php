@@ -1,23 +1,21 @@
 <?php
 
-namespace App\Filament\Resources\ProductResource\Pages;
+namespace App\Filament\Resources\PostResource\Pages;
 
-use App\Filament\Resources\ProductResource;
+use App\Filament\Resources\PostResource;
+use Filament\Actions;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
 
-class CreateProduct extends CreateRecord
+class CreatePost extends CreateRecord
 {
-    protected static string $resource = ProductResource::class;
+    protected static string $resource = PostResource::class;
 
-    public function save(): void
-    {
-        // ...
-
+    public function save() {
         Notification::make()
             ->title('Saved successfully')
-            ->body('Create product have been saved.')
+            ->body('Create post have been saved.')
             ->success()
             ->actions([
                 Action::make('view')

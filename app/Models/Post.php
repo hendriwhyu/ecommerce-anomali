@@ -23,8 +23,8 @@ class Post extends Model
     ];
 
 
-    public function setNameAttribute($value){
-        $this->attributes['name'] = $value;
+    public function setTitleAttribute($value){
+        $this->attributes['title'] = $value;
         $this->attributes['slug'] = Str::slug($value);
     }
 
