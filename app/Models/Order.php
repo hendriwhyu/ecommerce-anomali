@@ -14,7 +14,6 @@ class Order extends Model
 
     protected $fillable = [
         'user_id',
-        'total_price',
         'status'
     ];
 
@@ -22,7 +21,7 @@ class Order extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function items(): HasMany{
-        return $this->hasMany(Product::class, 'order_items', 'order_id', 'product_id');
+    public function orderItems(): HasMany{
+        return $this->hasMany(OrderItem::class);
     }
 }

@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 
 class ProductController extends BaseController
 {
+    /**
+     * @unauthenticated
+     */
     public function showProducts(Request $request){
         $productSearch = $request->query->get('item');
         $categorySearch = $request->query->get('category');
@@ -36,6 +39,9 @@ class ProductController extends BaseController
         return $this->sendResponse($data, 'Products retrieved successfully');
     }
 
+    /**
+     * @unauthenticated
+     */
     public function showProductById(Product $product){
         $productById = $product->with(['categories'])->first();
 

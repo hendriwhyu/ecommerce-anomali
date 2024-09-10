@@ -36,7 +36,6 @@ class CategoryResource extends Resource
                     ->label('Icon')
                     ->image()
                     ->required()
-                    ->optimize('webp', 'png', 'jpg', 'jpeg')
                     ->columnSpanFull(),
 
             ]);

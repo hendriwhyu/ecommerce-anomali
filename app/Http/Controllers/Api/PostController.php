@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 
 class PostController extends BaseController
 {
+    /**
+     * @unauthenticated
+     */
     public function showPosts(Request $request){
         $postSearch = $request->query->get('title');
         if($postSearch){
@@ -22,14 +25,17 @@ class PostController extends BaseController
         return $this->sendResponse($data, 'Posts retrieved successfully');
     }
 
-    public function showPostById($id){
-        $post = Post::with(['categories', 'author'])->findOrFail($id);
+    /**
+     * @unauthenticated
+     */
+    public function showPostById(Post $post){
+        $postById = $post->with(['categories', 'author'])->first();
 
-        if(!$post){
+        if(!$postById){
             return $this->sendError('Post not found.');
         }
 
-        $data = new PostCollection($post);
+        $data = new PostCollection($postById);
 
         return $this->sendResponse($data, 'Post retrieved successfully');
     }

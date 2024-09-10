@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('user_id')->constrained('users')->onDelete('cascade');
-            $table->float('total_price');
             $table->enum('status', ['pending', 'processing', 'completed', 'cancel'])->default('pending');
             $table->timestamps();
         });

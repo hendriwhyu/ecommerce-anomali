@@ -19,9 +19,20 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements FilamentUser, HasAvatar
 {
-    use HasFactory, Notifiable, HasRoles, HasPanelShield, HasApiTokens, HasUuids;
+    use HasFactory, HasApiTokens, Notifiable, HasRoles, HasPanelShield, HasUuids;
 
+    /**
+     * The "type" of the auto-incrementing ID.
+     *
+     * @var string
+     */
     protected $keyType = 'string';
+
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
     public $incrementing = false;
     /**
      * The attributes that are mass assignable.
@@ -59,11 +70,6 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
         ];
     }
 
-    // public function setPassword(string $password): static{
-    //     $this->password = bcrypt($password, env('BCRYPT_ROUNDS'));
-    //     return $this;
-    // }
-
     public function canAccessPanel(Panel $panel): bool
     {
         return str_ends_with($this->email, '@anomali.com');
@@ -81,4 +87,5 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
     {
         return $this->avatar_url ? Storage::url("$this->avatar_url") : null;
     }
+
 }

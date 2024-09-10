@@ -7,10 +7,14 @@ use App\Http\Resources\UserCollection;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends BaseController
 {
+    /**
+     * @unauthenticated
+     */
     public function login(Request $request)
     {
         try {
@@ -18,23 +22,28 @@ class AuthController extends BaseController
                 'email' => ['required', 'email'],
                 'password' => ['required'],
             ]);
+
+
             if(Auth::attempt($credentials)){
                 $user = Auth::user();
-                $success['token'] =  $user->createToken('Anomali')->plainTextToken;
-                $success['name'] =  $user->name;
+                $success['token'] = $user->createToken('Anomali')->plainTextToken;
+                $success['name'] = $user->name;
 
                 return $this->sendResponse($success, 'User login successfully.');
-            }
-            else{
-                return $this->sendError('Unauthorised', ['error' => 'Unauthorised'], 401);
+            } else{
+                return $this->sendError('Credentials is not valid', code: 400);
             }
         } catch (ValidationException $e) {
             return $this->sendError('BadRequest', ['errors' => $e->errors()], 400);
         } catch (\Throwable $th) {
-            return $this->sendError('ServerError', ['error' => $th->getMessage()], 500);
+            Log::error($th->getMessage());
+            return $this->sendError('ServerError', code: 500);
         }
     }
 
+    /**
+     * @unauthenticated
+     */
     public function register(Request $request)
     {
         try {
@@ -52,7 +61,8 @@ class AuthController extends BaseController
         }catch (ValidationException $e) {
             return $this->sendError('BadRequest', ['errors' => $e->errors()], 400);
         }catch (\Throwable $th) {
-            return $this->sendError('ServerError', ['error' => $th->getMessage()], 500);
+            Log::error($th->getMessage());
+            return $this->sendError('ServerError', code: 500);
         }
     }
 
@@ -65,7 +75,7 @@ class AuthController extends BaseController
         $dataUser = User::with(['roles'])->whereId($id)->first();
 
         if(!$dataUser){
-            return $this->sendError('User not found', [], 404);
+            return $this->sendError('User not found', code: 404);
         }
 
         $data = new UserCollection($dataUser);
