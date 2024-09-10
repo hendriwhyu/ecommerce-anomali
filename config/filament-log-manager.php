@@ -8,6 +8,7 @@ return [
      * You can set the name of the navigation in the translation file.
      */
     'navigation_group' => true,
+    
 
     /**
      * Navigation icon.

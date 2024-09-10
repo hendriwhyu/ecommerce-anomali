@@ -45,6 +45,17 @@ class AdminPanelProvider extends PanelProvider
             ->plugins([
                 \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
                 \FilipFonal\FilamentLogManager\FilamentLogManager::make(),
+                \Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin::make()
+                    ->slug('my-profile')
+                    ->setTitle('Profile')
+                    ->setNavigationLabel('Profile')
+                    ->setNavigationGroup('Settings')
+                    ->setIcon('heroicon-o-user')
+                    ->shouldShowAvatarForm(
+                        value: true,
+                        directory: 'avatars', // image will be stored in 'storage/app/public/avatars
+                        rules: 'mimes:jpeg,png|max:1024' //only accept jpeg and png files with a maximum size of 1MB
+                    )
             ])
             ->middleware([
                 EncryptCookies::class,

@@ -58,6 +58,7 @@ class ProductResource extends Resource
                 Forms\Components\FileUpload::make('image')
                     ->image()
                     ->required()
+                    ->optimize('webp', 'png', 'jpg', 'jpeg')
                     ->columnSpanFull(),
             ]);
     }
@@ -79,7 +80,7 @@ class ProductResource extends Resource
                     ->sortable(),
             ])
             ->filters([
-
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([

@@ -45,6 +45,7 @@ class PostResource extends Resource
                 Forms\Components\FileUpload::make('thumbnail')
                     ->required()
                     ->image()
+                    ->optimize('webp', 'png', 'jpg', 'jpeg')
                     ->columnSpanFull(),
                 Forms\Components\Select::make('author_id')
                     ->relationship('author', 'name')
@@ -73,7 +74,7 @@ class PostResource extends Resource
                     ->sortable()
             ])
             ->filters([
-
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([

@@ -9,6 +9,8 @@
         "bezhansalleh/filament-shield": "^3.2",
         "filament/notifications": "^3.2",
         "filipfonal/filament-log-manager": "^2.0",
+        "joaopaulolndev/filament-edit-profile": "^1.0",
+        "joshembling/image-optimizer": "^1.4",
         "laravel/framework": "^11.9",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",

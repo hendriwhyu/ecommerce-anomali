@@ -36,6 +36,7 @@ class CategoryResource extends Resource
                     ->label('Icon')
                     ->image()
                     ->required()
+                    ->optimize('webp', 'png', 'jpg', 'jpeg')
                     ->columnSpanFull(),
 
             ]);
@@ -57,7 +58,7 @@ class CategoryResource extends Resource
                     ->sortable(),
             ])
             ->filters([
-                //
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
