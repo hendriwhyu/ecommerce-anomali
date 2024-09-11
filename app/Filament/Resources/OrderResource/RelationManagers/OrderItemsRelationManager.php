@@ -29,7 +29,12 @@ class OrderItemsRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('id')
             ->columns([
-                Tables\Columns\TextColumn::make('id'),
+                Tables\Columns\TextColumn::make('product.name'),
+                Tables\Columns\TextColumn::make('product.categories.name')
+                ->badge(),
+                Tables\Columns\TextColumn::make('quantity'),
+                Tables\Columns\TextColumn::make('price')
+                ->money('IDR', true),
             ])
             ->filters([
                 //

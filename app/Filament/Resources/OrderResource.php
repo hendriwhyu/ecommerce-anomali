@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\OrderResource\Pages;
 use App\Filament\Resources\OrderResource\RelationManagers;
+use App\Filament\Resources\OrderResource\RelationManagers\OrderItemsRelationManager;
 use App\Models\Order;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -39,6 +40,7 @@ class OrderResource extends Resource
                 Tables\Columns\TextColumn::make('id'),
                 Tables\Columns\TextColumn::make('user.name')
                     ->searchable()
+                    ->label('Customer')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('total_price')
                     ->getStateUsing(fn (Order $record) => $record->orderItems->sum(fn ($item) => $item->price))
@@ -89,6 +91,7 @@ class OrderResource extends Resource
     {
         return [
             //
+            OrderItemsRelationManager::make(),
         ];
     }
 
