@@ -2,31 +2,28 @@
 
 namespace App\Models;
 
-use Exception;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
-class Product extends Model
+class Members extends Model
 {
     use HasFactory, HasUuids, SoftDeletes;
 
-    // protected $casts = [
-    //     'category_id' => 'array',
-    // ];
-
     protected $fillable = [
         'name',
+        'email',
         'slug',
         'description',
-        'price',
-        'stock',
         'image',
+        'social_media',
+    ];
+
+    protected $casts = [
+        'social_media' => 'array',
     ];
 
     public function setNameAttribute($value){
@@ -34,14 +31,8 @@ class Product extends Model
         $this->attributes['slug'] = Str::slug($value);
     }
 
-    public function returnStock(int $quantity)
+    public function teams(): BelongsToMany
     {
-        $this->stock += $quantity;
-        $this->save();
+        return $this->belongsToMany(Teams::class, 'teams_member', 'members_id', 'teams_id');
     }
-
-    public function categories(): BelongsToMany {
-        return $this->belongsToMany(Category::class, 'category_product', 'product_id', 'category_id');
-    }
-
 }

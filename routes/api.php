@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\MemberController;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\ProductController;
 use Illuminate\Http\Request;
@@ -11,12 +13,12 @@ Route::controller(AuthController::class)->group(function(){
     Route::post('/register', 'register');
     Route::post('/login', 'login');
     Route::delete('/logout', 'logout')->middleware('auth:sanctum');
-    Route::get('/user/{id}', 'showUserById')->middleware('auth:sanctum');
+    Route::get('/users/{id}', 'showUserById');
 });
 
 
 
-Route::get('/user', function (Request $request) {
+Route::get('/users', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
@@ -24,17 +26,14 @@ Route::get('/user', function (Request $request) {
 
 // Products
 Route::get('/products', [ProductController::class, 'showProducts']);
-Route::get('/products/{product:slug}', [ProductController::class, 'showProductById']);
+Route::get('/products/{productId}', [ProductController::class, 'showProductById']);
+Route::post('/products/{productId}/check-stock', [ProductController::class, 'checkStock']);
+Route::post('/products/{productId}/decrease-stock', [ProductController::class, 'decreaseStock']);
 
 // Posts
 Route::get('/posts', [PostController::class, 'showPosts']);
 Route::get('/posts/{post:slug}', [PostController::class, 'showPostById']);
 
-// Orders
-Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('/orders', [OrderController::class, 'showOrders']);
-    Route::get('/orders/{orderId}', [OrderController::class, 'showOrderById']);
-    Route::post('/orders', [OrderController::class, 'createOrder']);
-    Route::put('/orders/{orderId}', [OrderController::class, 'updateOrder']);
-    Route::delete('/orders/{orderId}', [OrderController::class, 'cancelOrder']);
-});
+// Members
+Route::get('/members', [MemberController::class, 'showMembers']);
+Route::get('/members/{memberId}', [MemberController::class, 'showMemberById']);

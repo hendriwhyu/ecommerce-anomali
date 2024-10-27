@@ -79,10 +79,6 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
         return $this->hasMany(Post::class);
     }
 
-    public function orders(): HasMany{
-        return $this->hasMany(Order::class);
-    }
-
     public function getFilamentAvatarUrl(): ?string
     {
         return $this->avatar_url ? Storage::url("$this->avatar_url") : null;

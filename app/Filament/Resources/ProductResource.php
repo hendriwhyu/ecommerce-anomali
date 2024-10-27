@@ -34,7 +34,7 @@ class ProductResource extends Resource
                     ->label('Category')
                     ->searchable()
                     ->multiple()
-                    ->columnSpan('full')
+                    ->columnSpanFull()
                     ->required()
                     ->preload()
                     ->relationship('categories', 'name'),
@@ -58,6 +58,7 @@ class ProductResource extends Resource
                 Forms\Components\FileUpload::make('image')
                     ->image()
                     ->required()
+                    ->directory('products')
                     ->optimize('webp', 'png', 'jpg', 'jpeg')
                     ->columnSpanFull(),
             ]);

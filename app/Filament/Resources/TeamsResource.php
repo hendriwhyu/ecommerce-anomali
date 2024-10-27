@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\PostResource\Pages;
-use App\Filament\Resources\PostResource\RelationManagers;
-use App\Models\Post;
+use App\Filament\Resources\TeamsResource\Pages;
+use App\Filament\Resources\TeamsResource\RelationManagers;
+use App\Models\Teams;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,43 +13,29 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class PostResource extends Resource
+class TeamsResource extends Resource
 {
-    protected static ?string $model = Post::class;
+    protected static ?string $model = Teams::class;
+
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-group';
 
     protected static ?string $navigationGroup = 'Resource';
-
-    protected static ?string $navigationIcon = 'heroicon-o-newspaper';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('title')
+
+                Forms\Components\TextInput::make('name')
+                    ->label('Teams Name')
                     ->required()
                     ->maxLength(255)
                     ->columnSpanFull(),
-                Forms\Components\Select::make('category_id')
-                    ->label('Category')
-                    ->searchable()
-                    ->multiple()
-                    ->columnSpan('full')
-                    ->required()
-                    ->preload()
-                    ->relationship('categories', 'name'),
-                Forms\Components\RichEditor::make('content')
-                    ->required()
-                    ->fileAttachmentsDisk('s3')
-                    ->fileAttachmentsDirectory('contents')
-                    ->columnSpanFull(),
-                Forms\Components\FileUpload::make('thumbnail')
-                    ->required()
+
+                Forms\Components\FileUpload::make('icon')
+                    ->label('Icon')
                     ->image()
-                    ->directory('posts')
-                    ->optimize('webp', 'png', 'jpg', 'jpeg')
-                    ->columnSpanFull(),
-                Forms\Components\Select::make('author_id')
-                    ->relationship('author', 'name')
+                    ->directory('icons')
                     ->required()
                     ->columnSpanFull(),
             ]);
@@ -59,20 +45,16 @@ class PostResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('title')
+                Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('categories.name')
-                    ->label('Category')
-                    ->badge()
-                    ->searchable()
-                    ->sortable(),
+                Tables\Columns\ImageColumn::make('icon'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
-                    ->sortable()
+                    ->sortable(),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
@@ -81,9 +63,6 @@ class PostResource extends Resource
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\EditAction::make(),
-                    Tables\Actions\DeleteAction::make(),
-                    Tables\Actions\ForceDeleteAction::make(),
-                    Tables\Actions\RestoreAction::make(),
                 ]),
             ])
             ->bulkActions([
@@ -105,9 +84,9 @@ class PostResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPosts::route('/'),
-            'create' => Pages\CreatePost::route('/create'),
-            'edit' => Pages\EditPost::route('/{record}/edit'),
+            'index' => Pages\ListTeams::route('/'),
+            'create' => Pages\CreateTeams::route('/create'),
+            'edit' => Pages\EditTeams::route('/{record}/edit'),
         ];
     }
 

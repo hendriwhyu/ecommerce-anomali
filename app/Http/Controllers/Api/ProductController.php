@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\BaseController;
 use App\Http\Resources\ProductCollection;
 use App\Models\Product;
+use Exception;
 use Illuminate\Http\Request;
 
 class ProductController extends BaseController
@@ -53,4 +54,30 @@ class ProductController extends BaseController
 
         return $this->sendResponse($data, 'Product retrieved successfully');
     }
+
+    public function checkStock($productId, Request $request){
+        $quantity = $request->input('quantity');
+        $product = Product::LockForUpdate()->findOrFail($productId);
+        if ($product->stock < $quantity) {
+            throw new Exception('Insufficient stock for product ' . $product->name);
+        }
+
+        return $this->sendResponse($product->stock, 'Product stock checked successfully');
+    }
+
+    public function decreaseStock($id, Request $request){
+        $quantity = $request->input('quantity');
+        $product = Product::LockForUpdate()->findOrFail($id);
+        $product->stock -= $quantity;
+        $product->save();
+    }
+
+    public function returnStock($id, Request $request){
+        $quantity = $request->input('quantity');
+        $product = Product::LockForUpdate()->findOrFail($id);
+        $product->stock += $quantity;
+        $product->save();
+    }
+
+
 }

@@ -35,6 +35,7 @@ class CategoryResource extends Resource
                 Forms\Components\FileUpload::make('icon')
                     ->label('Icon')
                     ->image()
+                    ->directory('icons')
                     ->required()
                     ->columnSpanFull(),
 
